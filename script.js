@@ -111,17 +111,23 @@ function stop_shield() {
 }
 
 function refresh() {
-    if (is_currently_shielding) {
-        frames.shield += 1;
-    } else {
-        frames.raw += 1;
+    if (nades_in_play > 0) {
+        if (is_currently_shielding) {
+            frames.shield += 1;
+        } else {
+            frames.raw += 1;
+        }
     }
-    document.getElementById('shield_rate').innerText = (100 * frames.shield / (frames.shield + frames.raw)).toFixed(0);
+    let shield_rate = (100 * frames.shield / (frames.raw + frames.shield));
+    if (isNaN(shield_rate)) {
+        shield_rate = 0;
+    }
+    document.getElementById('shield_rate').innerText = shield_rate.toFixed(1);
     let success_rate = (100 * nades_score.success / nades_score.total);
     if (isNaN(success_rate)) {
         success_rate = 0;
     }
-    document.getElementById('success_rate').innerText = success_rate.toFixed(0);
+    document.getElementById('success_rate').innerText = success_rate.toFixed(1);
     document.getElementById('score').innerText = nades_score.success;
     document.getElementById('total').innerText = nades_score.total;
 }
